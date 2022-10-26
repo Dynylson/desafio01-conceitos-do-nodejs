@@ -79,10 +79,14 @@ app.put("/todos/:id", checksExistsUserAccount, (request, response) => {
 
   const idTodo = user.todos.find((todo) => todo.id === id);
 
-  if (idTodo) {
-    idTodo.title = title;
-    idTodo.deadline = new Date(deadline);
+  if (!idTodo) {
+    return response.status(404).json({
+      error: "Não é possível alterar um todo inexistente!",
+    });
   }
+
+  idTodo.title = title;
+  idTodo.deadline = new Date(deadline);
 
   return response.json(idTodo);
 });
